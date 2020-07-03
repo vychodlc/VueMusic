@@ -1,0 +1,6 @@
+._search .van-search__content{
+    background-color: #202020;
+}
+._search .van-search__content input::-webkit-input-placeholder {
+  color: #545454;
+}
