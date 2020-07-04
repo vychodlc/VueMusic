@@ -8,9 +8,9 @@
     <van-row gutter="20">
         <van-col span="6" v-for="(url,name) in icons" :key="name">
             <div>
-                <!-- <div>
+                <div>
                     <img src="@/assets/imgs/rili.png" alt="">
-                </div> -->
+                </div>
                 <img :src="url" alt="">
                 <p style="margin-top: 1vh">{{ name }}</p>
                 <p style="margin-top: 1vh">{{ url }}</p>
