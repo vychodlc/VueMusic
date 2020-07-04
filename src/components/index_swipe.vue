@@ -42,12 +42,10 @@ export default {
     background-color: #000;
     padding-left: 2vh;
 }
-img{
+.swipe img{
     width: 90vw;
     height: (94*1080/400)vw;
-    /* width: (20*400/1080)vh;
-    height: 20vh; */
-    margin-left: 3vw;
+    margin-left: 5vw;
     border-radius: 2vh;
 }
 </style>

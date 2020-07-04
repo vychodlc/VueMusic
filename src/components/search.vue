@@ -33,8 +33,9 @@ export default {
 <style>
 ._search{
     display: inline-block;
+    /* margin-left: 10vw; */
 }
 .search{
-    width: 90vw;
+    width: 80vw;
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div>
     <van-tabbar v-model="active">
-        <van-tabbar-item icon="home-o">标签</van-tabbar-item>
-        <van-tabbar-item icon="search">标签</van-tabbar-item>
-        <van-tabbar-item icon="friends-o">标签</van-tabbar-item>
-        <van-tabbar-item icon="setting-o">标签</van-tabbar-item>
+        <van-tabbar-item icon="music-o">发现</van-tabbar-item>
+        <van-tabbar-item icon="video">视频</van-tabbar-item>
+        <van-tabbar-item icon="contact">我的</van-tabbar-item>
+        <van-tabbar-item icon="setting-o">账号</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>

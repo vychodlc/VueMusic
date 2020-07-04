@@ -1,22 +1,11 @@
 <template>
   <div id="icons">
-    <!-- <van-tabs>
-        <van-tab v-for="index in 8" :title="'标签 ' + index" :key="index">
-            内容 {{ index }}
-        </van-tab>
-    </van-tabs> -->
-    <van-row gutter="20">
-        <van-col span="6" v-for="(url,name) in icons" :key="name">
-            <div>
-                <div>
-                    <img src="@/assets/imgs/rili.png" alt="">
-                </div>
-                <img :src="url" alt="">
-                <p style="margin-top: 1vh">{{ name }}</p>
-                <p style="margin-top: 1vh">{{ url }}</p>
-            </div>
-        </van-col>
-    </van-row>
+      <div class="icon-item" v-for="(icon,index) in icons" :key="index">
+          <div class="icon">
+            <img :src="icon.url" alt="">
+          </div>
+          <div style="text-align:center; margin-top: 1vh">{{ icon.name }}</div>
+      </div>
   </div>
 </template>
 
@@ -25,12 +14,12 @@
     name: 'icon_swipe',
     data() {
         return {
-            icons: {
-                '每日推荐':'@/assets/imgs/rili.png',
-                '歌单':'@/assets/imgs/gedan.png',
-                '排行榜':'@/assets/imgs/ranking.png',
-                '私人FM':'@/assets/imgs/fm.png',
-            }
+            icons: [
+                { name:'每日推荐',url: require('@/assets/imgs/rili.png')},
+                { name:'歌单',url: require('@/assets/imgs/gedan.png')},
+                { name:'排行榜',url: require('@/assets/imgs/ranking.png')},
+                { name:'私人FM',url: require('@/assets/imgs/fm.png')},
+            ]
         };
     }
   }
@@ -38,11 +27,25 @@
 
 <style scoped>
 #icons{
-    text-align: center;
     color: #999;
 }
-#icons img{
+.icon-item{
+    display: inline-block;
+    margin-left: 8vw;
+    text-align: center;
+}
+.icon {
+    width: 15vw;
+    height: 15vw;
+    background-color: #333;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+}
+.icon img{
+    margin: 0 auto;
     width: 10vw;
     height: 10vw;
+    border-radius: 0;
 }
 </style>
