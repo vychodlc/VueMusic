@@ -9,8 +9,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'player',
-      component: player
+      name: 'index',
+      component: index
     },
     {
       path: '/player',

@@ -7,7 +7,7 @@ import router from './router'
 import "@/assets/resetVant.css"
 
 import {
-  Button, Row, Col, Tabbar, TabbarItem, Search, Swipe, SwipeItem, Lazyload, Tab, Tabs,Icon
+  Button, Row, Col, Tabbar, TabbarItem, Search, Swipe, SwipeItem, Lazyload, Tab, Tabs, Icon, Slider
 } from 'vant';
 
 Vue.config.productionTip = false
@@ -25,6 +25,7 @@ Vue.use(Lazyload, {
 Vue.use(Tab)
 Vue.use(Tabs)
 Vue.use(Icon)
+Vue.use(Slider)
 
 /* eslint-disable no-new */
 new Vue({

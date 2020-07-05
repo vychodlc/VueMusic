@@ -5,7 +5,14 @@
         <van-swipe-item  v-for="(swipe,index) in 3" :key="index">
             <div class="song-box">
                 <div class="song-item" v-for="(song,index2) in 3" :key="index2">
-                    <div class="song-item-left">
+                    <div class="song-item-left" 
+                    @click="
+                        playMusic(newsong_list[index*3+index2].id,
+                        newsong_list[index*3+index2].name,
+                        newsong_list[index*3+index2].song.artists[0].name,
+                        newsong_list[index*3+index2].picUrl)
+                        "
+                    >
                         <img class='song-img' :src="newsong_list[index*3+index2].picUrl" alt="">
                     </div>
                     <div class="song-item-right">
@@ -28,7 +35,6 @@ export default {
         return{
             // screenWidth: document.body.clientWidth,
             newsong_list: [],
-            li: [111,222,333,444,555,666,777,888,999,1111,11111,12123,123131,2323123]
         }
     },
     created(){
@@ -37,7 +43,7 @@ export default {
             method: 'get'
         }).then(res=>{
             this.newsong_list = res.data.result;
-            console.log(this.newsong_list)
+            console.log(this.newsong_list[1].picUrl)
         });
     },
     filters: {
@@ -51,8 +57,25 @@ export default {
         }
     },
     methods:{
-        playMusic(id){
-            console.log(id);
+        playMusic(id,singer,song,song_img){
+            axios({
+                url: "https://autumnfish.cn/song/url",
+                method: 'get',
+                params: {
+                    id: id
+                }
+            }).then(res=>{
+                this.$router.push({
+                    path:'/player',
+                    query:{
+                        id,
+                        url: res.data.data[0].url,
+                        singer,
+                        song,
+                        song_img
+                    }
+                });
+            });
         }
     }
 }
