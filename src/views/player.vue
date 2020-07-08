@@ -28,7 +28,16 @@
       </div>
     </div>
     <div class="player-lyrics">
-      <p v-for="(lyric,index) in songLyric" :key="index">{{lyric}}</p>
+      <van-swipe
+        style="height: 30vh;"
+        vertical
+        :height="20"
+        :autoplay="1000"
+      >
+        <van-swipe-item v-for="(lyric,index) in songLyric" :key="index" showIndicators = false>
+          <p>{{lyric|lyricSlice}}</p>
+        </van-swipe-item>
+      </van-swipe>
     </div>
     <div class="player-icons">
       <div class="player-icon">
@@ -45,10 +54,15 @@
       </div>
     </div>
     <div class="player-progress">
-      <van-slider v-model="value" :min="0" :max="100" button-size="1rem" @change="audioControl" />
+      <div class="player-progress-item">{{audioCurrentTime|timeFormat}}</div>
+      <div class="player-progress-item-slider">
+        <van-slider v-model="value" :min="0" :max="100" button-size="1rem" @change="audioControl" />
+      </div>
+      <div class="player-progress-item">{{audioAllTime|timeFormat}}</div>
     </div>
     <div class="player-player">
       <audio id="audioPlayer" :src="songUrl" autoplay>您的浏览器不支持 audio 标签。</audio>
+      <!-- <audio id="audioPlayer" src="../assets/nishuo.mp3" autoplay>您的浏览器不支持 audio 标签。</audio> -->
       <div class="player-player-icon">
         <van-icon name="replay" size="2rem" />
       </div>
@@ -58,7 +72,7 @@
       <div class="player-player-icon">
         <van-icon class="playBtn" :name="playBtn" size="6rem" ref="playBtn" @click="playSwitch" />
       </div>
-      <div class="player-player-icon" @click="nextSong">
+      <div class="player-player-icon">
         <van-icon name="arrow" size="3rem" />
       </div>
       <div class="player-player-icon">
@@ -77,11 +91,8 @@ export default {
   data() {
     return {
       value: 0,
-      audioTime: 0, //音频进度百分比
-      audioCurrentTime: "00:00", //音频当前播放时间
-      audioAllTime: "00:00", //音频总播放时间
-      audioAllDuration: 0, //音频总播放秒数
-      isPlay: false, //是否正在播放
+      audioCurrentTime: "00:00",
+      audioAllTime: "00:00",
 
       playBtn: "pause-circle-o",
       songId: "",
@@ -165,6 +176,7 @@ export default {
         id: this.songId
       }
     }).then(res => {
+      console.log(res);
       // this.songLyric = this.lyricFormat(res.data);
     });
   },
@@ -189,14 +201,19 @@ export default {
           console.log("当前歌曲播放完毕", audioPlayer.currentTime);
         }
         this.value = audioPlayer.currentTime / audioPlayer.duration * 100;
+        this.audioCurrentTime =
+          String(parseInt(audioPlayer.currentTime / 60)) +
+          ":" +
+          String(parseInt(audioPlayer.currentTime % 60));
+        this.audioAllTime =
+          String(parseInt(audioPlayer.duration / 60)) +
+          ":" +
+          String(parseInt(audioPlayer.duration % 60));
       }, 500);
     },
     audioControl(val) {
       const audioPlayer = document.getElementById("audioPlayer");
       audioPlayer.currentTime = val / 100 * audioPlayer.duration;
-    },
-    nextSong() {
-      this.value = 0;
     },
     returnIndex() {
       this.$router.replace("/");
@@ -217,6 +234,21 @@ export default {
     lyricFormat(lyrics) {
       console.log(lyrics);
     }
+  },
+  filters: {
+    lyricSlice: function(value) {
+      if (!value) return "";
+      return value.slice(11, 1000);
+    },
+    timeFormat: function(value) {
+      if (!value) return "";
+      if (value.length==3){
+        return '0' + value.slice(0,1) + ":0" + value.slice(2,3)
+      }else{
+        return '0' + value
+      }
+      return "0" + value;
+    },
   }
 };
 </script>
@@ -309,7 +341,10 @@ export default {
 .player-lyrics {
   width: 100vw;
   height: 30vh;
-  background-color: blue;
+  color: #ddd;
+}
+.player-lyrics p {
+  text-align: center;
 }
 .player-icons {
   width: 100vw;
@@ -323,10 +358,20 @@ export default {
   text-align: center;
 }
 .player-progress {
-  width: 80vw;
+  width: 100vw;
   height: 1vh;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   transform: translateY(-100%);
+}
+.player-progress-item {
+  flex: 1;
+  text-align: center;
+}
+.player-progress-item-slider {
+  flex: 5;
 }
 .player-player {
   width: 100vw;
@@ -334,7 +379,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateY(-10%);
+  transform: translateY(-5%);
 }
 .player-player-icon {
   flex: 1;

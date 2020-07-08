@@ -3,7 +3,7 @@
 
 <head>
   <meta charset=utf-8>
-  <meta name=viewport content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
   <title>vuemusic</title>
   <link rel=icon type=image/x-icon href=static/favicon.ico> <link
     href=/static/css/app.d58929809d6768d2c782e5ea8f73756f.css rel=stylesheet>
@@ -11,20 +11,23 @@
 
 <body>
   <script>
-    ~ function () {
-      let evt = 'onorientationchange' in window ? 'orientationchange' : 'resize';
+    document.ontouchmove = function (e) {
+      e.preventDefault();
+    };
+    // ~ function () {
+    //   let evt = 'onorientationchange' in window ? 'orientationchange' : 'resize';
 
-      function computed() {
-        let HTML = document.documentElement,
-          deviceW = HTML.clientWidth,
-          designW = 750,
-          ratio = deviceW / designW * 100;
-        if (designW > designW) ratio = 100;
-        HTML.style.fontSize = ratio + 'px';
-      }
-      computed();
-      window.addEventListener(evt, computed);
-    }
+    //   function computed() {
+    //     let HTML = document.documentElement,
+    //       deviceW = HTML.clientWidth,
+    //       designW = 750,
+    //       ratio = deviceW / designW * 100;
+    //     if (designW > designW) ratio = 100;
+    //     HTML.style.fontSize = ratio + 'px';
+    //   }
+    //   computed();
+    //   window.addEventListener(evt, computed);
+    // }
 
   </script>
   <div id=app></div>

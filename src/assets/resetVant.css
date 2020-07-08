@@ -38,3 +38,7 @@
 .van-hairline--surround::after {
   border-width: 0
 }
+
+.player-lyrics .van-swipe__indicator{
+  display: none;
+}
