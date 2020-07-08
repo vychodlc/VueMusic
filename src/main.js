@@ -3,11 +3,24 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 
 import "@/assets/resetVant.css"
 
 import {
-  Button, Row, Col, Tabbar, TabbarItem, Search, Swipe, SwipeItem, Lazyload, Tab, Tabs, Icon, Slider
+  Button,
+  Row,
+  Col,
+  Tabbar,
+  TabbarItem,
+  Search,
+  Swipe,
+  SwipeItem,
+  Lazyload,
+  Tab,
+  Tabs,
+  Icon,
+  Slider
 } from 'vant';
 
 Vue.config.productionTip = false
@@ -31,6 +44,9 @@ Vue.use(Slider)
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  store,
+  components: {
+    App
+  },
   template: '<App/>'
 })
