@@ -1,15 +1,5 @@
 <template>
   <div class="player">
-    <!-- <van-swipe style="height: 300px;" vertical :height="30" :autoplay="300">
-      <van-swipe-item v-for="(lyric,index) in songLyric" :key="index">{{lyric}}</van-swipe-item>
-    </van-swipe>-->
-    <!-- <div class="swiper-container swiper-lyrics">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide slide" v-for="(lyric,index) in songLyric" :key="index">{{lyric}}</div>
-      </div>
-      <div class="swiper-pagination"></div>
-    </div>-->
-
     <div class="player-header">
       <div class="player-back" @click="returnIndex">
         <van-icon name="arrow-left" size="2rem" />
@@ -31,11 +21,11 @@
       <van-swipe
         style="height: 30vh;"
         vertical
-        :height="20"
-        :autoplay="1000"
+        :height="25"
+        ref="lyricSwiper"
       >
         <van-swipe-item v-for="(lyric,index) in songLyric" :key="index" showIndicators = false>
-          <p>{{lyric|lyricSlice}}</p>
+          <p>{{lyric.text}}</p>
         </van-swipe-item>
       </van-swipe>
     </div>
@@ -93,6 +83,7 @@ export default {
       value: 0,
       audioCurrentTime: "00:00",
       audioAllTime: "00:00",
+      currentLyricIndex: 0,
 
       playBtn: "pause-circle-o",
       songId: "",
@@ -100,67 +91,7 @@ export default {
       songName: "",
       singerName: "",
       songImg: "",
-      songLyricTest: [
-        "12asdasdsad3",
-        "31asdasdasd2",
-        "2333asdasd3",
-        "asdasdasd"
-      ],
-      songLyric: [
-        "[00:00.000] 作曲 : 火星电台",
-        "[00:01.000] 作词 : 火星电台",
-        "[00:04.021]编曲 Arrangement：火星电台 Radio Mars",
-        "[00:04.305]Goodbye 偷信的人并不坏",
-        "[00:13.470]Goodbye 被爱的背对着爱 回来",
-        "[00:28.389]我们从小聪明 我们从大道理 先出来",
-        "[00:39.921]我们把老实的 我们把天才的 一一膜拜",
-        "[00:52.054]一一",
-        "[00:58.088]我们把小聪明 我们把大道理 先放开",
-        "[01:10.138]我们把找到的 我们把丢掉的 一 一 爱",
-        "[01:22.142]一 一 宠爱",
-        "[02:25.081]我们把小聪明 我们把大道理 先放开",
-        "[02:36.254]我们把找到的 我们把丢掉的 一 一 爱",
-        "[02:49.073]一 一 宠爱",
-        "[03:00.755]Goodbye 作秀的人 谁青睐 Hmm...",
-        "[03:12.670]Oh Bye 做错的如果能再重来",
-        "[03:25.089]我们从老实的 我们从天才的 先出来",
-        "[03:37.022]我们把小聪明 我们把大道理 一 一用坏",
-        "[03:49.437]一 一",
-        "[03:56.488]制作人 Producer：火星电台 Radio Mars",
-        "[03:56.690]木吉他 Acoustic Guitar：曾宇 Yu Zeng",
-        "[03:56.870]贝斯 Bass：韩阳 Yang Han",
-        "[03:57.088]鼓 Drum：贝贝 (武勇恒) Yongheng Wu",
-        "[03:57.304]小号 Trumpet：李晓川 Xiaochuan Li",
-        "[03:57.488]和声编写 Backing Vocals Arrangement：田馥甄 Hebe Tien、黄少峰 Shaofeng Huang",
-        "[03:57.687]和声 Backing Vocal：田馥甄 Hebe Tien",
-        "[03:57.872]录音师 Recording Engineers：黄钦胜 Adam Huang、阿烈 Alex",
-        "[03:58.074]录音室 Recording Studios：强力录音室Mega Force Studio、MDD Studio北京、上海升赫录音棚 Soundhub Studios",
-        "[03:58.255]混音师 Mixing Engineer：黄钦胜 Adam Huang",
-        "[03:58.405]混音室 Mixing Studio：强力录音室 Mega Force Studio",
-        "[03:58.620]母带后期处理工程师 Mastering Engineer：内田孝弘 UCHIDA TAKAHIRO",
-        "[03:58.805]母带后期录音室 Mastering Studio：FLAIR MASTERING WORKS",
-        "[03:58.988]OP：北京飞行者音乐科技有限公司",
-        "[03:59.188]SP：北京飞行者音乐科技有限公司",
-        "[04:00.704]TW-EW7-20-01006"
-      ],
-      arrItem: [
-        {
-          name: "swiperSlide5",
-          imgUrl: "http://pic.58pic.com/58pic/13/60/16/64b58PICXEK_1024.jpg"
-        },
-        {
-          name: "swiperSlide1",
-          imgUrl: "http://image.qmango.com/hotelimg/dl1210/109490/109.jpeg"
-        },
-        {
-          name: "swiperSlide51",
-          imgUrl: "http://image.qmango.com/hotelimg/dl1210/125708/181.jpeg"
-        },
-        {
-          name: "swiperSlide1111115",
-          imgUrl: "http://image.qmango.com/hotelimg/dl1210/119297/793.jpeg"
-        }
-      ]
+      songLyric: []
     };
   },
   created() {
@@ -176,16 +107,10 @@ export default {
         id: this.songId
       }
     }).then(res => {
-      console.log(res);
-      // this.songLyric = this.lyricFormat(res.data);
+      this.songLyric = this.lyricFormat(res.data);
     });
   },
   mounted() {
-    new Swiper(".swiper-container", {
-      autoplay: true,
-      direction: "vertical",
-      speed: 100
-    });
     this.setAudioInterval();
   },
   methods: {
@@ -209,6 +134,19 @@ export default {
           String(parseInt(audioPlayer.duration / 60)) +
           ":" +
           String(parseInt(audioPlayer.duration % 60));
+          
+        // for(let i=0;i<this.songLyric.length-1;i++){
+        //   // console.log(this.songLyric[i].time)
+        //   var currentLyric = this.songLyric[i].time;
+        //   var nextLyric = this.songLyric[i+1].time;
+        //   let durationLyric = audioPlayer.duration;
+        //   if((currentLyric<=durationLyric)&&(nextLyric>=durationLyric)){
+        //     this.$refs.lyricSwiper.swipeTo(i);
+        //   // console.log(currentLyric,nextLyric)
+        //   }
+        // }
+        this.$refs.lyricSwiper.swipeTo(this.currentLyricIndex++);
+        this.currentLyricIndex++;
       }, 500);
     },
     audioControl(val) {
@@ -229,10 +167,28 @@ export default {
       } else {
         this.playBtn = "play-circle-o";
         audioPlayer.pause();
-      }
+      };
     },
-    lyricFormat(lyrics) {
-      console.log(lyrics);
+    lyricFormat(lrc) {
+      let lyrics = lrc.split("\n");
+      let lrcObj = [];
+      for (let i = 0; i < lyrics.length; i++) {
+        let lyric = decodeURIComponent(lyrics[i]);
+        let timeReg = /\[\d*:\d*((\.|\:)\d*)*\]/g;
+        let timeRegExpArr = lyric.match(timeReg);
+        if (!timeRegExpArr) continue;
+        let clause = lyric.replace(timeReg, '');
+        for (let k = 0, h = timeRegExpArr.length; k < h; k++) {
+            let t = timeRegExpArr[k];
+            let min = Number(String(t.match(/\[\d*/i)).slice(1)),
+                sec = Number(String(t.match(/\:\d*/i)).slice(1));
+            let time = min * 60 + sec;
+            if (clause !== '') {
+                lrcObj.push({time: time, text: clause})
+            }
+        }
+      }
+      return lrcObj;
     }
   },
   filters: {
