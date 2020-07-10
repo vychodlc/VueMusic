@@ -39,6 +39,10 @@
   border-width: 0
 }
 
+.player-lyrics .van-swipe-item {
+  transform: translateY(400%);
+}
+
 .player-lyrics .van-swipe__indicator{
   display: none;
 }

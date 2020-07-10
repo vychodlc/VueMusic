@@ -11,6 +11,9 @@
       <div class="player-zhuanfa">
         <van-icon name="weapp-nav" size="2rem" />
       </div>
+      <div class="player-pointer">
+        <img src="@/assets/imgs/pointer.png" alt="">
+      </div>
     </div>
     <div class="player-image">
       <div class="player-image-rotate" :class="{'running-rotate': playBtn!='play-circle-o'}">
@@ -21,8 +24,9 @@
       <van-swipe
         style="height: 30vh;"
         vertical
-        :height="25"
+        :height="30"
         ref="lyricSwiper"
+        @change="onChange"
       >
         <van-swipe-item v-for="(lyric,index) in songLyric" :key="index" showIndicators = false>
           <p>{{lyric.text}}</p>
@@ -84,6 +88,7 @@ export default {
       audioCurrentTime: "00:00",
       audioAllTime: "00:00",
       currentLyricIndex: 0,
+      columns: ['杭州', '宁波', '温州', '嘉兴','杭州', '宁波', '温州', '嘉兴','杭州', '宁波', '温州', '嘉兴', '湖州'],
 
       playBtn: "pause-circle-o",
       songId: "",
@@ -135,18 +140,14 @@ export default {
           ":" +
           String(parseInt(audioPlayer.duration % 60));
           
-        // for(let i=0;i<this.songLyric.length-1;i++){
-        //   // console.log(this.songLyric[i].time)
-        //   var currentLyric = this.songLyric[i].time;
-        //   var nextLyric = this.songLyric[i+1].time;
-        //   let durationLyric = audioPlayer.duration;
-        //   if((currentLyric<=durationLyric)&&(nextLyric>=durationLyric)){
-        //     this.$refs.lyricSwiper.swipeTo(i);
-        //   // console.log(currentLyric,nextLyric)
-        //   }
-        // }
-        this.$refs.lyricSwiper.swipeTo(this.currentLyricIndex++);
-        this.currentLyricIndex++;
+        var currentTime = audioPlayer.currentTime;
+        for(let i=0;i<this.songLyric.length-1;i++){
+          var nowLyric = this.songLyric[i].time;
+          var nextLyric = this.songLyric[i+1].time;
+          if((nowLyric<=currentTime)&&(nextLyric>=currentTime)){
+            this.$refs.lyricSwiper.swipeTo(i);
+          }
+        }
       }, 500);
     },
     audioControl(val) {
@@ -189,6 +190,13 @@ export default {
         }
       }
       return lrcObj;
+    },
+    onChange(index) {
+      let len_onchange = document.getElementsByTagName('p').length
+      for(var i=0;i<len_onchange;i++){
+        document.getElementsByTagName('p')[i].id = '';
+      }
+      document.getElementsByTagName('p')[index].id = 'lyric-active';
     }
   },
   filters: {
@@ -227,6 +235,18 @@ export default {
 .player-zhuanfa {
   width: 10vw;
   text-align: center;
+}
+.player-pointer{
+  width: 30vw;
+  height: 50vw;
+  position: fixed;
+  top:10vh;
+  left:50vw;
+  z-index: 1000000;
+}
+.player-pointer img{
+  width: 100%;
+  height: 100%;
 }
 .player-brief {
   width: 80vw;
@@ -301,6 +321,11 @@ export default {
 }
 .player-lyrics p {
   text-align: center;
+  color: #999;
+}
+#lyric-active {
+  font-size: 1.1rem;
+  color: #ddd;
 }
 .player-icons {
   width: 100vw;

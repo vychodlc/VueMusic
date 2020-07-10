@@ -20,7 +20,8 @@ import {
   Tab,
   Tabs,
   Icon,
-  Slider
+  Slider,
+  Picker
 } from 'vant';
 
 Vue.config.productionTip = false
@@ -39,6 +40,7 @@ Vue.use(Tab)
 Vue.use(Tabs)
 Vue.use(Icon)
 Vue.use(Slider)
+Vue.use(Picker)
 
 /* eslint-disable no-new */
 new Vue({

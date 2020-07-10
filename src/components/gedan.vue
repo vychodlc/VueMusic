@@ -4,7 +4,7 @@
       <div class="b">
           <div class="box" v-for='(item,index) in gedan_list' :key="index">
               <div class="box-img">
-                  <img :src="item.picUrl" alt="">
+                  <img :src="item.coverImgUrl" alt="">
                   <span class="box-count">{{ item.playCount|Num2Wan }}</span>
                 </div>
               <div class="box-topic">{{ item.name }}</div>
@@ -25,13 +25,10 @@ export default {
     },
     created(){
         axios({
-            url: "https://autumnfish.cn/personalized",
-            method: 'get',
-            params: {
-                limit: 7
-            }
+            url: "https://api.itooi.cn/netease/songList/highQuality?cat=全部&pageSize=7",
+            method: 'get'
         }).then(res=>{
-            this.gedan_list = res.data.result
+            this.gedan_list = res.data.data
         });
     },
     filters: {

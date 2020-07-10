@@ -5,7 +5,7 @@
             <img v-lazy="image" width="200" height="200"/>
         </van-swipe-item> -->
         <van-swipe-item v-for="(item, index) in images" :key="index">
-            <img :src="item.imageUrl" alt="">
+            <img :src="item.picUrl" alt="">
         </van-swipe-item>
     </van-swipe>
   </div>
@@ -23,10 +23,10 @@ export default {
   },
   created(){
       axios({
-          url: "https://autumnfish.cn/banner",
+          url: "https://api.itooi.cn/netease/banner",
           method: 'get',
       }).then(res=>{
-          this.images = res.data.banners
+          this.images = res.data.data
       })
   }
 }

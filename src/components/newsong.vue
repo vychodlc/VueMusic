@@ -39,11 +39,10 @@ export default {
     },
     created(){
         axios({
-            url: "https://autumnfish.cn/personalized/newsong",
+            url: "https://api.itooi.cn/netease/song/newest",
             method: 'get'
         }).then(res=>{
-            this.newsong_list = res.data.result;
-            console.log(this.newsong_list[1].picUrl)
+            this.newsong_list = res.data.data;
         });
     },
     filters: {
@@ -58,24 +57,24 @@ export default {
     },
     methods:{
         playMusic(id,singer,song,song_img){
-            axios({
-                url: "https://autumnfish.cn/song/url",
-                method: 'get',
-                params: {
-                    id: id
-                }
-            }).then(res=>{
-                this.$router.push({
-                    path:'/player',
-                    query:{
-                        id,
-                        url: res.data.data[0].url,
-                        singer,
-                        song,
-                        song_img
-                    }
-                });
-            });
+          axios({
+              url: "https://api.imjad.cn/cloudmusic",
+              method: 'get',
+              params: {
+                  id: id
+              }
+          }).then(res=>{
+              this.$router.push({
+                  path:'/player',
+                  query:{
+                      id,
+                      url: res.data.data[0].url,
+                      singer,
+                      song,
+                      song_img
+                  }
+              });
+          });
         }
     }
 }
